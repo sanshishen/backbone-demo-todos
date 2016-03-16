@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>Todos</title>
+		<meta name="author" content="sanshishen">
+		<!-- 2016-03-13 14:54:33 -->
+		<link rel="stylesheet" type="text/css" href="">
+	</head>
+	<body>
+	    <!-- Templates -->
+	    <script type="text/template" id="item-template">
+		    <div class="view">
+		      <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
+		      <label><%- title %></label>
+		      <a class="destroy"></a>
+		    </div>
+		    <input class="edit" type="text" value="<%- title %>" />
+	    </script>
+        <script type="text/template" id="stats-template">
+            <% if (done) { %>
+              <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
+            <% } %>
+            <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+        </script>
+	    <script type="text/javascript" src="./assets/lib/underscore/underscore-min.js"></script>
+	    <script type="text/javascript" src="./assets/lib/zepto/zepto.min.js"></script>
+	    <script type="text/javascript" src="./assets/lib/backbone/backbone-min.js"></script>
+	    <script type="text/javascript" src="./assets/lib/backbone.localStorage/backbone.localStorage-min.js"></script>
+	</body>
+</html>
