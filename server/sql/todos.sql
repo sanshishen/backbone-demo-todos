@@ -6,3 +6,5 @@ create user todos@localhost identified by 'sanshishen';
 grant all privileges on todos.* to todos@localhost;
 #activte privileges setting
 flush privileges;
+
+#create table
