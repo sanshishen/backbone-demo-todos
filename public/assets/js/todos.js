@@ -8,6 +8,7 @@
 'use strict';
 $(function() {
     var Todo = Backbone.Model.extend({
+        urlRoot: '/todos/todo',
         defaults: function() {
             return {
                 title: 'empty todo...',
@@ -22,8 +23,9 @@ $(function() {
 
     var TodoList = Backbone.Collection.extend({
         model: Todo,
+        urlRoot: '/todos/todos',
         // 保存所有的todo项到"todos-backbone"命名空间下
-        localStorage: new Backbone.LocalStorage("todos-backbone"),
+        //localStorage: new Backbone.LocalStorage("todos-backbone"),
         done: function() {
             return this.where({done: true});
         },

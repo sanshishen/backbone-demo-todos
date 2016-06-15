@@ -2,7 +2,8 @@
   "name": "sanshishen",
   "version": "1.0.0",
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "mysql": "latest"
   },
   "devDependencies": {
     "gulp": "^3.9.1"
