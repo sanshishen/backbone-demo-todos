@@ -24,8 +24,6 @@ $(function() {
     var TodoList = Backbone.Collection.extend({
         model: Todo,
         url: '/todos/todos',
-        // 保存所有的todo项到"todos-backbone"命名空间下
-        //localStorage: new Backbone.LocalStorage("todos-backbone"),
         done: function() {
             return this.where({done: true});
         },
@@ -45,20 +43,39 @@ $(function() {
         tagName: 'li',
         template: _.template($('#item-template').html()),
         events: {
-
+            'click .toggle': 'toggleDone',
+            'dblclick .view': 'edit',
+            'keypress .edit': 'updateOnEnter',
+            'click a.destroy': 'clear'
         },
         initialize: function() {
-
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.remove);
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
+            this.$el.toggleClass('done', this.model.get('done'));
+            this.input = this.$('.edit');
             return this;
         },
-        toggleDone: function() {},
-        edit: function() {},
-        close: function() {},
-        updateOnEnter: function() {},
-        clear: function() {}
+        toggleDone: function() {
+            this.model.toggle();
+        },
+        edit: function() {
+            this.$el.addClass('editing');
+            this.input.focus();
+        },
+        close: function() {
+            var value = this.input.val();
+            this.model.save({title: value});
+            this.$el.toggleClass('editing');
+        },
+        updateOnEnter: function(e) {
+            if (e.keyCode == 13) this.close();
+        },
+        clear: function() {
+            this.model.destroy();
+        }
     });
 
     var AppView = Backbone.View.extend({
@@ -72,6 +89,11 @@ $(function() {
             this.allCheckbox = this.$('#toggle-all')[0];
             this.footer = this.$('#footer');
             this.main = $('#main');
+            this.list = $('#todo-list');
+
+            this.listenTo(Todos, 'add', this.addOne);
+            this.listenTo(Todos, 'all', this.render);
+
             Todos.fetch();
         },
         render: function() {
@@ -90,9 +112,12 @@ $(function() {
         createOnEnter: function(e) {
             if (e.keyCode != 13) return;
             if (!this.input.val()) return;
-            console.log(this.input.val());
             Todos.create({title: this.input.val()});
             this.input.val('');
+        },
+        addOne: function(model) {
+            var view = new TodoView({model: model});
+            this.list.append(view.render().el);
         }
     });
 

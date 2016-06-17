@@ -12,18 +12,21 @@ var router = express.Router();
 var dao = require('../dao/todoDao');
 
 router.route('/todo')
-    .put(function(req, res, next) {
-        console.log('/todo put');
-    })
     .get(function(req, res, next) {
         console.log('/todo get');
     })
     .post(function(req, res, next) {
         console.log('/todo post');
-        dao.insert(req, res, next);
+        //dao.insert(req, res, next);
+    });
+router.route('/todo/:id')
+    .put(function(req, res, next) {
+        console.log('/todo put');
+        dao.update(req, res, next);
     })
     .delete(function(req, res, next) {
         console.log('/todo delete');
+        dao.delete(req, res, next);
     });
 // 获取全部信息
 router.route('/todos')

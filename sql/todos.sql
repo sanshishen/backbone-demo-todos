@@ -11,7 +11,7 @@ flush privileges;
 create table `todos`(
     `id` int(11) not null auto_increment,
     `title` varchar(50),
-    `order` tinyint(4),
+    `_order` tinyint(4),
     `done` boolean,
     primary key (`id`)
 ) engine=MyISAM default charset=utf8;

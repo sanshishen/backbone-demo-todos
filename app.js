@@ -2,10 +2,14 @@ var express = require('express'),
     port = process.env.PORT || 3000,
     path = require('path'),
     bodyParser = require('body-parser'),
+    favicon = require('serve-favicon'),
     todos = require('./routes/todos');
 
 var app = express(),
     port = process.env.PORT || 3000;
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/favicon.ico'));
 
 // set static files' path
 app.use(express.static(path.join(__dirname + '/public')));

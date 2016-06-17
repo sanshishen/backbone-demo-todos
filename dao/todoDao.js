@@ -29,7 +29,15 @@ module.exports = {
         var params = req.body;
         pool.getConnection(function(err, connection) {
             connection.query(sql.insert, [params.title, params.order, params.done], function(err, result) {
-                console.log(err, result);
+                jsonWrite(res, result);
+                connection.release();
+            });
+        });
+    },
+    update: function(req, res, next) {
+        var params = req.body;
+        pool.getConnection(function(err, connection) {
+            connection.query(sql.update, [params.title, params.order, params.done, params.id], function(err, result) {
                 jsonWrite(res, result);
                 connection.release();
             });
@@ -37,8 +45,22 @@ module.exports = {
     },
     queryAll: function(req, res, next) {
         pool.getConnection(function(err, connection) {
-            connection.query(sql.queryAll, function(err, result) {
-                jsonWrite(res, result);
+            connection.query(sql.queryAll, function(err, rows) {
+                if (rows && rows.length > 0) {
+                    var result = [];
+                    for (var i = 0; i < rows.length; i ++) {
+                        var row = rows[i], obj = {
+                            id: row.id,
+                            title: row.title,
+                            order: row._order,
+                            done: row.done == 1
+                        };
+                        result.push(obj);
+                    }
+                    jsonWrite(res, result);
+                } else {
+                    jsonWrite(res, []);
+                }
                 connection.release();
             });
         });

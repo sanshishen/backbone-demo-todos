@@ -8,7 +8,9 @@
 'use strict';
 
 var todo = {
-    insert: 'insert into todos(title, [order], done) values (?,?,?)',
+    insert: 'insert into todos(title, _order, done) values (?,?,?)',
+    update: 'update todos set title=?, _order=?, done=? where id=?',
+    delete: 'delete from todos where id=?',
     queryAll: 'select * from todos'
 };
 
