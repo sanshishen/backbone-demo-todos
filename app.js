@@ -1,10 +1,16 @@
 var express = require('express'),
+    port = process.env.PORT || 3000,
+    path = require('path'),
+    bodyParser = require('body-parser'),
+    todos = require('./routes/todos');
+
+var app = express(),
     port = process.env.PORT || 3000;
-var app = express();
-var todos = require('./routes/todos');
 
 // set static files' path
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname + '/public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/todos', todos);
 

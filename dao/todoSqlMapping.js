@@ -8,6 +8,7 @@
 'use strict';
 
 var todo = {
+    insert: 'insert into todos(title, [order], done) values (?,?,?)',
     queryAll: 'select * from todos'
 };
 

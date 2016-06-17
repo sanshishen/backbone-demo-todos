@@ -23,7 +23,7 @@ $(function() {
 
     var TodoList = Backbone.Collection.extend({
         model: Todo,
-        urlRoot: '/todos/todos',
+        url: '/todos/todos',
         // 保存所有的todo项到"todos-backbone"命名空间下
         //localStorage: new Backbone.LocalStorage("todos-backbone"),
         done: function() {
@@ -72,8 +72,7 @@ $(function() {
             this.allCheckbox = this.$('#toggle-all')[0];
             this.footer = this.$('#footer');
             this.main = $('#main');
-
-            //Todos.fetch();
+            Todos.fetch();
         },
         render: function() {
             var done = Todos.done().length,
@@ -91,8 +90,11 @@ $(function() {
         createOnEnter: function(e) {
             if (e.keyCode != 13) return;
             if (!this.input.val()) return;
-
-            
+            console.log(this.input.val());
+            Todos.create({title: this.input.val()});
+            this.input.val('');
         }
-    })
+    });
+
+    var app = new AppView;
 });
