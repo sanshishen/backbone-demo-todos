@@ -46,7 +46,8 @@ $(function() {
             'click .toggle': 'toggleDone',
             'dblclick .view': 'edit',
             'keypress .edit': 'updateOnEnter',
-            'click a.destroy': 'clear'
+            'click a.destroy': 'clear',
+            'blur .edit': 'close'
         },
         initialize: function() {
             this.listenTo(this.model, 'change', this.render);
@@ -82,16 +83,19 @@ $(function() {
         el: $('#todoapp'),
         statsTemplate: _.template($('#stats-template').html()),
         events: {
-            'keypress #new-todo': 'createOnEnter'
+            'keypress #new-todo': 'createOnEnter',
+            'click #clear-completed': 'clearCompleted',
+            'click #toggle-all': 'toggleAllComplete'
         },
         initialize: function() {
             this.input = this.$('#new-todo');
             this.allCheckbox = this.$('#toggle-all')[0];
-            this.footer = this.$('#footer');
+            this.footer = this.$('footer');
             this.main = $('#main');
             this.list = $('#todo-list');
 
             this.listenTo(Todos, 'add', this.addOne);
+            this.listenTo(Todos, 'reset', this.addAll)
             this.listenTo(Todos, 'all', this.render);
 
             Todos.fetch();
@@ -118,6 +122,19 @@ $(function() {
         addOne: function(model) {
             var view = new TodoView({model: model});
             this.list.append(view.render().el);
+        },
+        addAll: function() {
+            Todos.each(this.addOne, this);
+        },
+        clearCompleted: function() {
+            _.invoke(Todos.done(), 'destroy');
+            return false;
+        },
+        toggleAllComplete: function() {
+            var done = this.allCheckbox.checked;
+            Todos.each(function(todo) {
+                todo.save({'done': done});
+            });
         }
     });
 

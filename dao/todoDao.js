@@ -29,7 +29,10 @@ module.exports = {
         var params = req.body;
         pool.getConnection(function(err, connection) {
             connection.query(sql.insert, [params.title, params.order, params.done], function(err, result) {
-                jsonWrite(res, result);
+                if (result) {
+                    params.id = result.insertId;
+                }
+                jsonWrite(res, params);
                 connection.release();
             });
         });
@@ -43,21 +46,30 @@ module.exports = {
             });
         });
     },
+    delete: function(req, res, next) {
+        var id = req.params.id;
+        pool.getConnection(function(err, connection) {
+            connection.query(sql.delete, [id], function(err, result) {
+                jsonWrite(res, result);
+                connection.release();
+            });
+        });
+    },
     queryAll: function(req, res, next) {
         pool.getConnection(function(err, connection) {
-            connection.query(sql.queryAll, function(err, rows) {
-                if (rows && rows.length > 0) {
-                    var result = [];
-                    for (var i = 0; i < rows.length; i ++) {
-                        var row = rows[i], obj = {
+            connection.query(sql.queryAll, function(err, result) {
+                if (result && result.length > 0) {
+                    var rows = [];
+                    for (var i = 0; i < result.length; i ++) {
+                        var row = result[i], obj = {
                             id: row.id,
                             title: row.title,
                             order: row._order,
                             done: row.done == 1
                         };
-                        result.push(obj);
+                        rows.push(obj);
                     }
-                    jsonWrite(res, result);
+                    jsonWrite(res, rows);
                 } else {
                     jsonWrite(res, []);
                 }
