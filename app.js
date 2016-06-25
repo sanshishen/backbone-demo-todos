@@ -1,5 +1,4 @@
 var express = require('express'),
-    port = process.env.PORT || 3000,
     path = require('path'),
     bodyParser = require('body-parser'),
     favicon = require('serve-favicon'),
